@@ -8,14 +8,22 @@
                     <div class="field">
                         <label for="">Email</label>
                         <div class="control">
-                            <input type="email" name="email" class="input">
+                            <input type="email" name="email" class="input" v-model="username">
                         </div>
                     </div>
                     <div class="field">
                         <label for="">Password</label>
                         <div class="control">
-                            <input type="password" name="password1" class="input">
+                            <input type="password" name="password1" class="input" v-model="password">
                         </div>
+                    </div>
+                    <div
+                        v-if="errors.length"
+                        class="notification is-danger"
+                    >
+                        <p v-for="error in errors" :key="error">
+                            {{ error }}
+                        </p>
                     </div>
                     <div class="field">
                         <div class="control">
@@ -29,7 +37,28 @@
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
-        name:'LogIn'
+        name:'LogIn',
+        data() {
+            return {
+                username: '',
+                password: '',
+                errors: []
+            }
+        },
+
+        methods: {
+            submit() {
+                axios.defaults.headers.common['Authorization'] = ''
+                localStorage.removeItem('token')
+
+                const formData = {
+                        username: this.username,
+                        password: this.password
+                    }
+            }
+        }
     }
 </script>
