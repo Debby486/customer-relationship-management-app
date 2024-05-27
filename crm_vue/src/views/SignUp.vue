@@ -84,16 +84,13 @@
                             })
 
                             this.$router.push('/log-in')
-                            console.log('got here');
                         })
                         .catch(error => {
                             if(error.response) {
                                 for (const property in error.response.data){
-                                    console.log('got2')
                                     this.errors.push(`${property}: ${error.response.data[property]}`)
                                 }
                             } else if(error.message) {
-                                console.log('got3')
                                 this.errors.push('Something went wrong. Please try again')
                             }
                         })

@@ -4,7 +4,7 @@
             <div class="column is-4 is-offset-4">
                 <h1 class="title">Log in</h1>
 
-                <form>
+                <form @submit.prevent="submit">
                     <div class="field">
                         <label for="">Email</label>
                         <div class="control">
@@ -57,7 +57,29 @@
                 const formData = {
                         username: this.username,
                         password: this.password
-                    }
+                }
+
+                axios
+                    .post('/api/v1/token/login', formData)
+                    .then(response => {
+                        const token = response.data.auth_token
+
+                        this.$store.commit('setToken', token)
+
+                        axios.defaults.headers.common['Authorization'] = 'Token ' + token
+                        //save token in local storage
+                        localStorage.setItem('token', token)
+                        this.$router.push('/dashboard/my-account')
+                    })
+                    .catch(error => {
+                            if(error.response) {
+                                for (const property in error.response.data){
+                                    this.errors.push(`${property}: ${error.response.data[property]}`)
+                                }
+                            } else if(error.message) {
+                                this.errors.push('Something went wrong. Please try again')
+                            }
+                        })
             }
         }
     }
