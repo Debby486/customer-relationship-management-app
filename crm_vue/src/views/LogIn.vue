@@ -50,7 +50,8 @@
         },
 
         methods: {
-            submit() {
+            async submit() {
+                this.$store.commit('setIsLoading', true)
                 axios.defaults.headers.common['Authorization'] = ''
                 localStorage.removeItem('token')
 
@@ -59,7 +60,7 @@
                         password: this.password
                 }
 
-                axios
+                await axios
                     .post('/api/v1/token/login', formData)
                     .then(response => {
                         const token = response.data.auth_token
@@ -80,6 +81,7 @@
                                 this.errors.push('Something went wrong. Please try again')
                             }
                         })
+                this.$store.commit('setIsLoading', false)
             }
         }
     }
